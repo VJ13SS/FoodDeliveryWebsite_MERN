@@ -6,6 +6,10 @@ import { StoreContext } from "../../context/storeContext";
 export default function Navbar({setShowLogin}) {
   const [menu, setMenu] = useState("Home");
   const {getTotalCartAmount} = useContext(StoreContext)
+  const showLogin = () =>{
+    setShowLogin(true)
+    document.body.classList.add("no-scroll")
+  }
 
   return (
     <div className="navbar">
@@ -26,7 +30,7 @@ export default function Navbar({setShowLogin}) {
           
           <div className={getTotalCartAmount()?"dot":''}></div>
         </div>
-        <button onClick={() => setShowLogin(true)}>Sign in</button>
+        <button onClick={showLogin}>Sign in</button>
       </div>
     </div>
   );

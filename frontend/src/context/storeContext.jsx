@@ -9,6 +9,7 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
+  const url = "http://localhost:4000"
 
   const addToCart = (itemId) => {
     //if the user has not selected the item a new item will be created with its id as the key and value as 1
@@ -44,6 +45,7 @@ const StoreContextProvider = ({ children }) => {
     addToCart,
     removeFromCart,
     getTotalCartAmount,
+    url,
   };
 
   return (
