@@ -3,7 +3,7 @@ import { addFood, listFood, removeFood } from "../controllers/foodController.js"
 import multer from "multer"
 
 const foodRouter = express.Router()//using this we can create get,post,other methods
-
+//we use this to organize and modularize our routes in an express.js application
 
 //image storage engine
 //to store the image on the uploads folder

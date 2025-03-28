@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./loginPopup.css";
-import { useCallback } from "react";
 import { StoreContext } from "../../context/storeContext";
+import axios from "axios"
+
 
 export default function LoginPopup({ setShowLogin }) {
 
-  const {url} = useCallback(StoreContext)
+  const {url,setToken} = useContext(StoreContext)
   const [currentState, setCurrentState] = useState("Sign Up");
   const [data, setData] = useState({
     name: "",
@@ -20,6 +21,27 @@ export default function LoginPopup({ setShowLogin }) {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onLogin = async (event) =>{
+    event.preventDefault()
+    let newUrl = url
+    if(currentState === "Login"){
+      newUrl += "/api/user/login"
+    }else{
+      newUrl += "/api/user/register"
+    }
+
+    const response = await axios.post(newUrl,data)
+    
+    if(response.data.success){
+      setToken(response.data.token)
+      localStorage.setItem("token",response.data.token)
+      closeLoginPopup()
+    }
+    else{
+      alert(response.data.message)
+    }
+  }
+
   const closeLoginPopup = () =>{
     setShowLogin(false)
     document.body.classList.remove('no-scroll')
@@ -27,7 +49,7 @@ export default function LoginPopup({ setShowLogin }) {
 
   return (
     <div className="login-popup">
-      <form action="" className="login-popup-container">
+      <form action="" className="login-popup-container" onSubmit={onLogin}>
         <div className="login-popup-title">
           <h2>{currentState}</h2>
           <img
@@ -46,15 +68,15 @@ export default function LoginPopup({ setShowLogin }) {
           <input type="email"  placeholder="Your Email" name="email" onChange={onChangeHandler} value={data.email} required />
           <input type="password" name="password" placeholder="Password" onChange={onChangeHandler} value={data.password} required />
         </div>
-        <button>
-          {currentState === "Sign up" ? "Create account" : "Login"}
+        <button type="submit">
+          {currentState === "Sign Up" ? "Create account" : "Login"}
         </button>
         <div className="login-popup-condition">
           <input type="checkbox" name="" required />
           <p>By Continuing, i agree to the terms of use & privacy Ppolicy.</p>
         </div>
         {currentState === "Login" ? (
-          <p onClick={() => setCurrentState("Sign up")}>
+          <p onClick={() => setCurrentState("Sign Up")}>
             Create a new accoutn? <span>Click here</span>
           </p>
         ) : (
