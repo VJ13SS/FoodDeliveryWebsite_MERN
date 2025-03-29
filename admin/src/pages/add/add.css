@@ -22,6 +22,10 @@
     padding: 10px;
 }
 
+.add-product-descripton textarea{
+    resize: none;
+}
+
 .add-category-price{
     display: flex;
     gap: 30px;

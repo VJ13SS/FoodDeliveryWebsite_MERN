@@ -91,7 +91,7 @@ export default function Add({url}) {
         <div className="add-category-price">
           <div className="add-category flex-col">
             <p>Priduct Category</p>
-            <select name="category" onChange={onChangeHandler} id="">
+            <select name="category" onChange={onChangeHandler} id="" value={data.category}>
               <option value="Salad">Salad</option>
               <option value="Rolls">Rolls</option>
               <option value="Deserts">Deserts</option>

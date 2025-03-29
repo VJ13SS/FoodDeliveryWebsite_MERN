@@ -14,7 +14,7 @@ const StoreContextProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
 
-  const addToCart = (itemId) => {
+  const addToCart = async (itemId) => {
     //if the user has not selected the item a new item will be created with its id as the key and value as 1
     if (!cartItems[itemId]) {
       setCartItems((prev) => ({ ...prev, [itemId]: 1 }));
@@ -22,10 +22,24 @@ const StoreContextProvider = ({ children }) => {
       //update the quantity of the item
       setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
     }
+    if (token) {
+      await axios.post(
+        url + "/api/cart/add",
+        { itemId },
+        { headers: { token } }
+      );
+    }
   };
 
-  const removeFromCart = (itemId) => {
+  const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    if (token) {
+      await axios.post(
+        url + "/api/cart/remove",
+        { itemId },
+        { headers: { token } }
+      );
+    }
   };
 
   const getTotalCartAmount = () => {
@@ -46,11 +60,22 @@ const StoreContextProvider = ({ children }) => {
     setFoodList(response.data.data);
   };
 
+  const loadCartData = async (token) => {
+    const response = await axios.post(
+      url + "/api/cart/get",
+      {},
+      { headers: { token } }
+    ); //here we dont need to pass ant data to backend so we use empty object
+    setCartItems(response.data.cartData);
+  };
+
   useEffect(() => {
     async function loadData() {
       await fetchFoodList();
       if (localStorage.getItem("token")) {
         setToken(localStorage.getItem("token"));
+        console.log(url)
+        await loadCartData(localStorage.getItem("token"));
       }
     }
     loadData();
