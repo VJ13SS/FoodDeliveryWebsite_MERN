@@ -44,7 +44,7 @@ const StoreContextProvider = ({ children }) => {
 
   const getTotalCartAmount = () => {
     let totlAmount = 0;
-
+    
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
         let itemInfo = food_list.find((product) => product._id === item); //if matching then the product is available in the cart
@@ -58,6 +58,7 @@ const StoreContextProvider = ({ children }) => {
   const fetchFoodList = async () => {
     const response = await axios.get(url + "/api/food/list");
     setFoodList(response.data.data);
+    console.log(food_list)
   };
 
   const loadCartData = async (token) => {
