@@ -7,10 +7,12 @@ import Footer from "./components/footer/footer";
 import { useState } from "react";
 import LoginPopup from "./components/loginPopup/loginPopup";
 import StoreContextProvider from "./context/storeContext";
+import Verify from "./pages/verify/verify";
+import MyOrders from "./pages/myOrders/myOrders";
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false);
-  console.log('hello')
+  console.log("hello");
   return (
     <>
       {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
@@ -19,15 +21,10 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/cart"
-            element={
-              
-                <Cart />
-              
-            }
-          />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
+          <Route path="/verify" element={<Verify />} />
+          <Route path="/myorders" element={<MyOrders />} />
         </Routes>
       </div>
       <Footer />

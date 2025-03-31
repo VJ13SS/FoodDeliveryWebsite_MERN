@@ -70,7 +70,7 @@ export default function Navbar({ setShowLogin }) {
           <div className="navbar-profile">
             <img src="./Images/profile_icon.png" alt="" />
             <ul className="nav-profile-dropdown">
-              <li><img src="./Images/bag_icon.png" alt="" /><p>Orders</p></li>
+              <li onClick={() => navigate('/myorders')}><img src="./Images/bag_icon.png" alt="" /><p>Orders</p></li>
               <hr />
               <li onClick={logout}><img src="./Images/logout_icon.png" alt="" /><p>Logout</p></li>
             </ul>

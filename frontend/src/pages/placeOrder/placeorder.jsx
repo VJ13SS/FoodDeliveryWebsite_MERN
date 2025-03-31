@@ -1,6 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./placeorder.css";
 import { StoreContext } from "../../context/storeContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 export default function PlaceOrder() {
   const { getTotalCartAmount, token, food_list, cartItems, url } =
@@ -34,8 +37,36 @@ export default function PlaceOrder() {
         ordeItems.push(itemInfo);
       }
     });
-    
+
+    let orderData = {
+      address: data,
+      items: ordeItems,
+      amount: getTotalCartAmount() + 2,
+      //2 for delivery charges
+    };
+
+    let response = await axios.post(url + "/api/order/place", orderData, {
+      headers: { token },
+    });
+
+    if (response.data.success) {
+      const { session_url } = response.data;
+      //send the user on to the session url
+      window.location.replace(session_url);
+    } else {
+      alert("Error");
+    }
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/cart')
+    }else if(getTotalCartAmount() == 0){
+      navigate('/cart')
+    }
+  }, [token]);
 
   return (
     <form className="place-order" onSubmit={PlaceOrder}>
@@ -48,13 +79,15 @@ export default function PlaceOrder() {
             onChange={onChangeHandler}
             value={data.firstName}
             placeholder="First Name"
+            required
           />
           <input
             type="text"
-            name="lasttName"
+            name="lastName"
             onChange={onChangeHandler}
             value={data.lastName}
             placeholder="Last Name"
+            required
           />
         </div>
         <input
@@ -63,6 +96,7 @@ export default function PlaceOrder() {
           onChange={onChangeHandler}
           value={data.email}
           placeholder="Email Address"
+          required
         />
         <input
           type="text"
@@ -70,6 +104,7 @@ export default function PlaceOrder() {
           onChange={onChangeHandler}
           value={data.street}
           placeholder="Street"
+          required
         />
         <div className="multi-fields">
           <input
@@ -78,6 +113,7 @@ export default function PlaceOrder() {
             onChange={onChangeHandler}
             value={data.city}
             placeholder="City"
+            required
           />
           <input
             type="text"
@@ -85,6 +121,7 @@ export default function PlaceOrder() {
             onChange={onChangeHandler}
             value={data.state}
             placeholder="State"
+            required
           />
         </div>
         <div className="multi-fields">
@@ -94,6 +131,7 @@ export default function PlaceOrder() {
             onChange={onChangeHandler}
             value={data.zipcode}
             placeholder="Zip Code"
+            required
           />
           <input
             type="text"
@@ -101,6 +139,7 @@ export default function PlaceOrder() {
             onChange={onChangeHandler}
             value={data.country}
             placeholder="Country"
+            required
           />
         </div>
         <input
@@ -109,6 +148,7 @@ export default function PlaceOrder() {
           onChange={onChangeHandler}
           value={data.phone}
           placeholder="Phone"
+          required
         />
       </div>
       <div className="place-order-right">
