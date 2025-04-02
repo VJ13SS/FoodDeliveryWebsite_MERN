@@ -9,7 +9,7 @@ const stripe = new Stripe(stripe_secret_key)
 //placing user order from fontend
 const placeOrder = async (req,res) =>{
 
-    const frontend_url = "http://localhost:5173"
+    const frontend_url = "http://localhost:5174"//when the admin,backend,front end was running the port on which the front end was running was at 5174
 
     try {
         //creates a new order
@@ -103,4 +103,15 @@ const listOrders = async (req,res) =>{
     }
 }
 
-export {placeOrder,verifyOrder,userOrders,listOrders}
+//api for updating order status
+const updateStatus = async (req,res) => {
+    try {
+        await orderModel.findByIdAndUpdate(req.body.orderId,{status:req.body.status})
+        return res.json({success:true,message:'Status Updated'})
+    } catch (error) {
+        console.log(error)
+        return res.json({success:false,message:'Error'})
+    }
+}
+
+export {placeOrder,verifyOrder,userOrders,listOrders,updateStatus}
